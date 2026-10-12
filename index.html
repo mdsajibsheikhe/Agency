@@ -396,17 +396,36 @@
           <dl class="details">
             <div>
               <dt>Email</dt>
-              <dd>mdsajibsheikh103@email.com</dd>
+              <dd><a href="mailto:mdsajibsheikh103@email.com">mdsajibsheikh103@email.com</a></dd>
             </div>
             <div>
               <dt>Location</dt>
-              <dd>Khulna, Dhaka — Bangladesh, working worldwide</dd>
+              <dd>Bangladesh — working worldwide</dd>
             </div>
             <div>
-              <dt>Hours</dt>
-              <dd>Sat – Thu, 10:00 – 20:00 (GMT+6)</dd>
+              <dt>Office hours</dt>
+              <dd>Sun – Thu, 10:00 – 20:00 (GMT+6)</dd>
+            </div>
+            <div>
+              <dt>Reply time</dt>
+              <dd>Within 24 hours</dd>
             </div>
           </dl>
+
+          <div class="pick">
+            <p class="pick-title">Or pick a package:</p>
+            <div class="pick-btns">
+              <button type="button" class="pick-btn" data-budget="$99 — Starter (3–5 days)">
+                <b>$99</b><span>Starter · 3–5 days</span>
+              </button>
+              <button type="button" class="pick-btn is-active" data-budget="$189 — Growth (1 week)">
+                <b>$189</b><span>Growth · 1 week</span>
+              </button>
+              <button type="button" class="pick-btn" data-budget="$350 — Premium (2 weeks)">
+                <b>$350</b><span>Premium · 2 weeks</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- ✅ Formspree: replace YOUR_FORM_ID with your own form ID -->
@@ -456,7 +475,8 @@
             <textarea id="message" name="message" rows="5" placeholder="What do you need, and by when?" required></textarea>
           </div>
 
-          <button type="submit" class="btn btn-dark btn-block">Send enquiry</button>
+          <button type="submit" class="btn btn-dark btn-block" id="submitBtn">Send enquiry</button>
+          <p class="form-fine">No spam, no sales calls — we only reply about your project.</p>
           <p class="form-note" id="formMsg" hidden></p>
         </form>
       </div>

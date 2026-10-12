@@ -28,6 +28,18 @@ form.addEventListener('submit', async (e) => {
 
   const btn = form.querySelector('button[type="submit"]');
   const original = btn.textContent;
+  const showNote = (text, ok) => {
+    note.hidden = false;
+    note.className = 'form-note ' + (ok ? 'ok' : 'err');
+    note.textContent = text;
+  };
+
+  /* Formspree ID এখনো বসানো হয়নি */
+  if (form.action.includes('YOUR_FORM_ID')) {
+    showNote('Form is not connected yet — please email us directly.', false);
+    return;
+  }
+
   btn.disabled = true;
   btn.textContent = 'Sending...';
 
@@ -40,14 +52,13 @@ form.addEventListener('submit', async (e) => {
 
     if (!res.ok) throw new Error('bad response');
 
-    note.hidden = false;
-    note.className = 'form-note ok';
-    note.textContent = 'Thanks — your enquiry has been sent. We reply within 24 hours.';
+    showNote('Thanks — your enquiry has been sent. We reply within 24 hours.', true);
     form.reset();
+    document.querySelectorAll('.pick-btn').forEach((x, i) =>
+      x.classList.toggle('is-active', i === 1)
+    );
   } catch {
-    note.hidden = false;
-    note.className = 'form-note err';
-    note.textContent = 'Something went wrong. Please try again or email us directly.';
+    showNote('Something went wrong. Please try again or email us directly.', false);
   } finally {
     btn.disabled = false;
     btn.textContent = original;
@@ -56,6 +67,21 @@ form.addEventListener('submit', async (e) => {
 
 /* ================= FOOTER YEAR ================= */
 document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ================= PACKAGE PICKER (contact) ================= */
+const budgetSel = document.getElementById('budget');
+document.querySelectorAll('.pick-btn').forEach((b) => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.pick-btn').forEach((x) => x.classList.remove('is-active'));
+    b.classList.add('is-active');
+    if (budgetSel) budgetSel.value = b.dataset.budget;
+  });
+});
+if (budgetSel) budgetSel.addEventListener('change', () => {
+  document.querySelectorAll('.pick-btn').forEach((x) =>
+    x.classList.toggle('is-active', x.dataset.budget === budgetSel.value)
+  );
+});
 
 /* ================= SCROLL PROGRESS BAR ================= */
 const progress = document.getElementById('progress');

@@ -303,6 +303,34 @@ h3{font-size:1.1rem;letter-spacing:-.02em}
 .details>div{background:var(--paper);padding:16px 0}
 .details dt{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
 .details dd{font-size:1rem;margin-top:3px}
+.details dd a{color:var(--accent);font-weight:500}
+.details dd a:hover{text-decoration:underline}
+
+/* ---- package picker ---- */
+.pick{margin-top:30px}
+.pick-title{
+  font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-2);font-weight:600;margin-bottom:14px;
+}
+.pick-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pick-btn{
+  display:flex;flex-direction:column;gap:2px;align-items:flex-start;
+  padding:14px 16px;border-radius:12px;cursor:pointer;text-align:left;
+  background:var(--paper-2);border:1px solid var(--line);
+  transition:border-color .25s,transform .25s var(--ease),box-shadow .25s;
+}
+.pick-btn:hover{border-color:var(--accent);transform:translateY(-3px)}
+.pick-btn.is-active{
+  border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,79,255,.13);
+}
+.pick-btn b{font-size:1.15rem;font-weight:600;letter-spacing:-.02em}
+.pick-btn span{font-size:.76rem;color:var(--ink-2)}
+.pick-btn.is-active b{color:var(--accent)}
+
+.form-fine{
+  margin-top:12px;text-align:center;
+  font-size:.82rem;color:var(--ink-2);
+}
 
 .form{
   background:var(--paper-2);border:1px solid var(--line);
@@ -492,6 +520,7 @@ h3{font-size:1.1rem;letter-spacing:-.02em}
 @media(max-width:640px){
   .work,.team,.steps{grid-template-columns:1fr}
   .row{grid-template-columns:1fr;gap:0}
+  .pick-btns{grid-template-columns:1fr}
   .hero-actions{width:100%}
   .hero-actions .btn{flex:1 1 auto}
   .foot-bottom{flex-direction:column;gap:6px}
