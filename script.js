@@ -112,7 +112,7 @@ if ('IntersectionObserver' in window) {
 
 /* ================= SCROLL REVEAL ================= */
 const targets = document.querySelectorAll(
-  '.head, .srv, .case, .person, .steps li, .details, .form'
+  '.head, .srv, .case, .person, .steps li, .details, .form, .plan'
 );
 
 if ('IntersectionObserver' in window) {
