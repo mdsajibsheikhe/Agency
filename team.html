@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Panel — Agency</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="panel.css" />
+</head>
+<body>
+
+  <!-- ============ AUTH ============ -->
+  <section class="auth" id="authScreen">
+    <div class="auth-card">
+      <span class="logo">AGENCY<span>®</span></span>
+      <h1>Team sign in</h1>
+      <p>Sign in with the email and password your admin gave you.</p>
+
+      <form id="authForm">
+        <div class="field">
+          <label for="tEmail">Email</label>
+          <input id="tEmail" type="email" placeholder="you@agency.com" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="tPass">Password</label>
+          <input id="tPass" type="password" placeholder="Your password" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-dark btn-block" id="authBtn">Sign in</button>
+        <p class="msg" id="authMsg" hidden></p>
+      </form>
+
+      <p class="auth-alt">
+        No account? Ask your admin to add you in the
+        <a href="admin.html" style="color:var(--accent)">admin panel</a>.
+      </p>
+      <p class="hint">⚠️ Setup pending: add your Supabase keys in <b>config.js</b> and run <b>schema.sql</b>.</p>
+    </div>
+  </section>
+
+  <!-- ============ APP ============ -->
+  <div id="appScreen" hidden>
+    <header class="topbar">
+      <div class="wrap topbar-inner">
+        <a href="index.html" class="logo">AGENCY<span>®</span></a>
+        <div class="who">
+          <div class="who-txt">
+            <b id="userName">Member</b>
+            <small id="userRole">Team</small>
+          </div>
+          <div class="who-av" id="userAv">M</div>
+          <button class="btn btn-ghost btn-sm" id="logoutBtn">Sign out</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="page wrap">
+      <div class="page-head">
+        <div>
+          <h1>My tasks</h1>
+          <p id="welcomeLine">Here is your work for today.</p>
+        </div>
+        <a href="index.html" class="btn btn-ghost btn-sm">← Back to website</a>
+      </div>
+
+      <section class="stats">
+        <div class="stat"><b id="stTodo">0</b><span>To do</span></div>
+        <div class="stat"><b id="stDoing">0</b><span>In progress</span></div>
+        <div class="stat"><b id="stDone">0</b><span>Completed</span></div>
+        <div class="stat"><b id="stAll">0</b><span>Total</span></div>
+      </section>
+
+      <div class="block">
+        <h2>Task list</h2>
+        <p class="sub">Move a task between To do → In progress → Completed.</p>
+
+        <div class="filters">
+          <button class="filter active" data-filter="all">All</button>
+          <button class="filter" data-filter="todo">To do</button>
+          <button class="filter" data-filter="doing">In progress</button>
+          <button class="filter" data-filter="done">Completed</button>
+        </div>
+
+        <div class="list" id="taskList">
+          <div class="loading">Loading your tasks…</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="team.js"></script>
+</body>
+</html>

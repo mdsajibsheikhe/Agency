@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Agency</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="panel.css" />
+</head>
+<body>
+
+  <!-- ============ AUTH (login / signup) ============ -->
+  <section class="auth" id="authScreen">
+    <div class="auth-card">
+      <span class="logo">AGENCY<span>®</span></span>
+      <h1 id="authTitle">Admin sign in</h1>
+      <p id="authSub">Sign in to manage your team and tasks.</p>
+
+      <form id="authForm">
+        <div class="field" id="nameField" hidden>
+          <label for="aName">Your name</label>
+          <input id="aName" type="text" placeholder="Full name" autocomplete="name" />
+        </div>
+
+        <div class="field">
+          <label for="aEmail">Email</label>
+          <input id="aEmail" type="email" placeholder="you@agency.com" required autocomplete="email" />
+        </div>
+
+        <div class="field">
+          <label for="aPass">Password</label>
+          <input id="aPass" type="password" placeholder="At least 6 characters" required minlength="6" autocomplete="current-password" />
+        </div>
+
+        <button type="submit" class="btn btn-dark btn-block" id="authBtn">Sign in</button>
+        <p class="msg" id="authMsg" hidden></p>
+      </form>
+
+      <p class="auth-alt">
+        <span id="altText">First time? Create the admin account.</span>
+        <button type="button" id="altBtn">Sign up</button>
+      </p>
+      <p class="hint">⚠️ Setup pending: add your Supabase keys in <b>config.js</b> and run <b>schema.sql</b>.</p>
+    </div>
+  </section>
+
+  <!-- ============ APP ============ -->
+  <div id="appScreen" hidden>
+    <header class="topbar">
+      <div class="wrap topbar-inner">
+        <a href="index.html" class="logo">AGENCY<span>®</span></a>
+        <div class="who">
+          <div class="who-txt">
+            <b id="adminName">Admin</b>
+            <small>Administrator</small>
+          </div>
+          <div class="who-av" id="adminAv">A</div>
+          <button class="btn btn-ghost btn-sm" id="logoutBtn">Sign out</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="page wrap">
+      <div class="page-head">
+        <div>
+          <h1>Admin panel</h1>
+          <p>Add or remove team members, assign work and track progress.</p>
+        </div>
+        <a href="team.html" class="btn btn-ghost btn-sm">Open team panel →</a>
+      </div>
+
+      <section class="stats">
+        <div class="stat"><b id="stMembers">0</b><span>Team members</span></div>
+        <div class="stat"><b id="stTodo">0</b><span>To do</span></div>
+        <div class="stat"><b id="stDoing">0</b><span>In progress</span></div>
+        <div class="stat"><b id="stDone">0</b><span>Completed</span></div>
+      </section>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="members">Team members</button>
+        <button class="tab" data-tab="tasks">Assign work</button>
+        <button class="tab" data-tab="all">All tasks</button>
+      </div>
+
+      <!-- ---------- MEMBERS ---------- -->
+      <section class="panel active" id="tab-members">
+        <div class="two-col">
+          <div class="block">
+            <h2>Add a team member</h2>
+            <p class="sub">They will sign in at <b>team.html</b> with this email and password.</p>
+
+            <form id="memberForm">
+              <div class="field">
+                <label for="mName">Full name</label>
+                <input id="mName" type="text" placeholder="e.g. Rahim Uddin" required />
+              </div>
+              <div class="field">
+                <label for="mEmail">Email</label>
+                <input id="mEmail" type="email" placeholder="member@email.com" required />
+              </div>
+              <div class="field">
+                <label for="mRole">Role</label>
+                <select id="mRole">
+                  <option>Graphic Designer</option>
+                  <option>Digital Marketer</option>
+                  <option>Social Media Manager</option>
+                  <option>SEO Specialist</option>
+                  <option>Video Editor</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="mPass">Temporary password</label>
+                <input id="mPass" type="text" placeholder="At least 6 characters" required minlength="6" />
+              </div>
+              <button type="submit" class="btn btn-dark btn-block">Add member</button>
+              <p class="msg" id="memberMsg" hidden></p>
+            </form>
+          </div>
+
+          <div class="block">
+            <h2>Your team</h2>
+            <p class="sub">Remove a member and they lose access to the panel immediately.</p>
+            <div class="list" id="memberList">
+              <div class="loading">Loading team…</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- ASSIGN ---------- -->
+      <section class="panel" id="tab-tasks">
+        <div class="two-col">
+          <div class="block">
+            <h2>Assign a task</h2>
+            <p class="sub">The assigned member will see it in their panel.</p>
+
+            <form id="taskForm">
+              <div class="field">
+                <label for="tTitle">Task title</label>
+                <input id="tTitle" type="text" placeholder="e.g. Design 5 Instagram posts" required />
+              </div>
+              <div class="field">
+                <label for="tDesc">Details <span>(optional)</span></label>
+                <textarea id="tDesc" placeholder="Size, brand colours, deadline notes…"></textarea>
+              </div>
+              <div class="field">
+                <label for="tAssign">Assign to</label>
+                <select id="tAssign" required>
+                  <option value="">— select a member —</option>
+                </select>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label for="tDue">Due date <span>(optional)</span></label>
+                  <input id="tDue" type="date" />
+                </div>
+                <div class="field">
+                  <label for="tStatus">Status</label>
+                  <select id="tStatus">
+                    <option value="todo">To do</option>
+                    <option value="doing">In progress</option>
+                    <option value="done">Completed</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-dark btn-block">Assign task</button>
+              <p class="msg" id="taskMsg" hidden></p>
+            </form>
+          </div>
+
+          <div class="block">
+            <h2>Unassigned tasks</h2>
+            <p class="sub">Tasks with no member yet.</p>
+            <div class="list" id="unassignedList">
+              <div class="loading">Loading…</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- ALL TASKS ---------- -->
+      <section class="panel" id="tab-all">
+        <div class="block">
+          <h2>All tasks</h2>
+          <p class="sub">Change status or delete any task.</p>
+          <div class="filters">
+            <button class="filter active" data-filter="all">All</button>
+            <button class="filter" data-filter="todo">To do</button>
+            <button class="filter" data-filter="doing">In progress</button>
+            <button class="filter" data-filter="done">Completed</button>
+          </div>
+          <div class="list" id="allList">
+            <div class="loading">Loading tasks…</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
