@@ -130,14 +130,7 @@ h3{font-size:1.1rem;letter-spacing:-.02em}
 .stats strong{display:block;font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:600;letter-spacing:-.04em}
 .stats span{font-size:.85rem;color:var(--ink-2)}
 
-/* ---------- strip ---------- */
-.strip{border-block:1px solid var(--line);background:var(--paper-2);overflow:hidden}
-.strip-inner{
-  display:flex;gap:26px;align-items:center;padding:18px 0;
-  font-size:.9rem;letter-spacing:.05em;text-transform:uppercase;
-  color:var(--ink-2);flex-wrap:wrap;justify-content:center;
-}
-.strip-inner i{color:var(--accent);font-style:normal}
+/* ---------- strip (marquee styles are in ANIMATIONS) ---------- */
 
 /* =========================================================
    SECTIONS
@@ -281,6 +274,110 @@ h3{font-size:1.1rem;letter-spacing:-.02em}
 .reveal.in{opacity:1;transform:none}
 
 /* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+/* ---- scroll progress bar ---- */
+.progress{
+  position:absolute;left:0;bottom:-1px;height:2px;width:0%;
+  background:var(--accent);transition:width .1s linear;z-index:5;
+}
+
+/* ---- hero title: line by line mask reveal ---- */
+.hero .eyebrow,
+.hero .hero-bottom,
+.hero .stats li{animation:fadeUp .8s var(--ease) both}
+.hero .eyebrow{animation-delay:.05s}
+.hero .hero-bottom{animation-delay:.55s}
+.hero .stats li:nth-child(1){animation-delay:.75s}
+.hero .stats li:nth-child(2){animation-delay:.85s}
+.hero .stats li:nth-child(3){animation-delay:.95s}
+.hero .stats li:nth-child(4){animation-delay:1.05s}
+
+.hero-title .line{
+  display:block;overflow:hidden;padding-bottom:.06em;
+}
+.hero-title .line>span{
+  display:block;transform:translateY(110%);
+  animation:lineUp .95s var(--ease) both;
+}
+.hero-title .line:nth-child(1)>span{animation-delay:.15s}
+.hero-title .line:nth-child(2)>span{animation-delay:.3s}
+
+@keyframes lineUp{
+  from{transform:translateY(110%)}
+  to{transform:translateY(0)}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(22px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ---- marquee strip ---- */
+.strip{
+  border-block:1px solid var(--line);background:var(--paper-2);
+  overflow:hidden;white-space:nowrap;
+}
+.strip-track{
+  display:inline-flex;gap:26px;align-items:center;
+  padding:17px 0;animation:marquee 32s linear infinite;
+  font-size:.9rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);
+}
+.strip-track:hover{animation-play-state:paused}
+.strip-track i{color:var(--accent);font-style:normal}
+@keyframes marquee{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* ---- service row hover ---- */
+.srv{transition:background .3s,padding .35s var(--ease)}
+.srv:hover{background:rgba(31,79,255,.04)}
+.srv:hover .srv-no{transform:translateX(4px);color:var(--accent)}
+.srv-no{transition:transform .3s var(--ease),color .3s}
+
+/* ---- work cards ---- */
+.case{transition:transform .45s var(--ease)}
+.case-img{transition:transform .6s var(--ease),box-shadow .5s var(--ease)}
+.case-img::after{transition:transform .6s var(--ease);transform-origin:center}
+.case:hover .case-img{box-shadow:0 22px 44px rgba(14,17,22,.18)}
+.case:hover .case-img::after{transform:scale(1.06)}
+.case-meta h3{transition:color .3s}
+.case:hover .case-meta h3{color:var(--accent)}
+
+/* ---- person cards ---- */
+.person-img{transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.person:hover .person-img{
+  transform:translateY(-6px);
+  box-shadow:0 20px 40px rgba(14,17,22,.16);
+}
+
+/* ---- process steps ---- */
+.steps li{transition:transform .4s var(--ease)}
+.steps li:hover{transform:translateY(-6px)}
+.steps li span{transition:letter-spacing .35s var(--ease)}
+.steps li:hover span{letter-spacing:.2em}
+
+/* ---- buttons ---- */
+.btn{transition:transform .3s var(--ease),background .3s,color .3s,border-color .3s,box-shadow .3s}
+.btn-dark:hover{box-shadow:0 12px 28px rgba(31,79,255,.28)}
+
+/* ---- nav links ---- */
+.menu>a:not(.btn){transition:color .25s,transform .3s var(--ease)}
+.menu>a:not(.btn):hover{transform:translateY(-1px)}
+
+/* ---- contact details rows ---- */
+.details>div{transition:background .3s,padding-left .3s var(--ease)}
+.details>div:hover{background:rgba(31,79,255,.05);padding-left:10px}
+
+/* ---- logo dot pulse on load ---- */
+.logo span{display:inline-block;animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:.45}
+}
+
+/* =========================================================
    RESPONSIVE
    ========================================================= */
 @media(max-width:1024px){
@@ -325,5 +422,8 @@ h3{font-size:1.1rem;letter-spacing:-.02em}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none;transition:none}
-  *{animation:none!important}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .hero-title .line>span{transform:none!important}
+  .hero .eyebrow,.hero .hero-bottom,.hero .stats li{opacity:1!important;transform:none!important}
+  .strip-track{white-space:normal;flex-wrap:wrap;justify-content:center}
 }

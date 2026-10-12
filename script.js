@@ -57,9 +57,62 @@ form.addEventListener('submit', async (e) => {
 /* ================= FOOTER YEAR ================= */
 document.getElementById('year').textContent = new Date().getFullYear();
 
+/* ================= SCROLL PROGRESS BAR ================= */
+const progress = document.getElementById('progress');
+const updateProgress = () => {
+  const h = document.documentElement;
+  const max = h.scrollHeight - h.clientHeight;
+  progress.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+};
+document.addEventListener('scroll', updateProgress, { passive: true });
+updateProgress();
+
+/* ================= MARQUEE — duplicate for seamless loop ================= */
+const track = document.getElementById('stripTrack');
+if (track) track.innerHTML += track.innerHTML;
+
+/* ================= COUNTER ANIMATION (hero stats) ================= */
+const animateCount = (el) => {
+  const raw = el.dataset.count || el.textContent;
+  const match = raw.match(/^([^\d]*)([\d.]+)(.*)$/);
+  if (!match) return;
+  const [, prefix, numStr, suffix] = match;
+  const target = parseFloat(numStr);
+  const decimals = numStr.includes('.') ? 1 : 0;
+  const duration = 1400;
+  const start = performance.now();
+
+  const tick = (now) => {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+    el.textContent = prefix + (target * eased).toFixed(decimals) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+};
+
+const statNums = document.querySelectorAll('.stats strong');
+statNums.forEach((el) => (el.dataset.count = el.textContent));
+
+if ('IntersectionObserver' in window) {
+  const countIO = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          countIO.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.6 }
+  );
+  statNums.forEach((el) => countIO.observe(el));
+}
+
+
 /* ================= SCROLL REVEAL ================= */
 const targets = document.querySelectorAll(
-  '.head, .srv, .case, .person, .steps li, .details, .form, .stats li'
+  '.head, .srv, .case, .person, .steps li, .details, .form'
 );
 
 if ('IntersectionObserver' in window) {
