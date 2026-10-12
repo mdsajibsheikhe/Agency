@@ -1,26 +1,33 @@
-// ===== Navbar scroll effect =====
-const navbar = document.getElementById('navbar');
+/* ================= NAV ================= */
+const nav = document.getElementById('nav');
+const burger = document.getElementById('burger');
+const menu = document.getElementById('menu');
+
 window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 40);
+  nav.classList.toggle('stuck', window.scrollY > 10);
 });
 
-// ===== Mobile menu =====
-const menuBtn = document.getElementById('menuBtn');
-const navLinks = document.getElementById('navLinks');
+burger.addEventListener('click', () => {
+  const open = menu.classList.toggle('open');
+  burger.setAttribute('aria-expanded', String(open));
+});
 
-menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
-navLinks.querySelectorAll('a').forEach(a =>
-  a.addEventListener('click', () => navLinks.classList.remove('open'))
+menu.querySelectorAll('a').forEach((a) =>
+  a.addEventListener('click', () => {
+    menu.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+  })
 );
 
-// ===== Contact form (Formspree) =====
+/* ================= CONTACT FORM (Formspree) ================= */
 const form = document.getElementById('contactForm');
-const formMsg = document.getElementById('formMsg');
+const note = document.getElementById('formMsg');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const btn = form.querySelector('button');
+  const btn = form.querySelector('button[type="submit"]');
+  const original = btn.textContent;
   btn.disabled = true;
   btn.textContent = 'Sending...';
 
@@ -31,44 +38,46 @@ form.addEventListener('submit', async (e) => {
       headers: { Accept: 'application/json' },
     });
 
-    if (res.ok) {
-      formMsg.hidden = false;
-      formMsg.className = 'form-msg';
-      formMsg.textContent = '✅ Thank you! Your message has been sent.';
-      form.reset();
-    } else {
-      throw new Error('failed');
-    }
+    if (!res.ok) throw new Error('bad response');
+
+    note.hidden = false;
+    note.className = 'form-note ok';
+    note.textContent = 'Thanks — your enquiry has been sent. We reply within 24 hours.';
+    form.reset();
   } catch {
-    formMsg.hidden = false;
-    formMsg.className = 'form-msg err';
-    formMsg.textContent = '❌ Could not send — please try again.';
+    note.hidden = false;
+    note.className = 'form-note err';
+    note.textContent = 'Something went wrong. Please try again or email us directly.';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Send Message';
+    btn.textContent = original;
   }
 });
 
-// ===== Footer year =====
+/* ================= FOOTER YEAR ================= */
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// ===== Reveal on scroll =====
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = 1;
-        entry.target.style.transform = 'translateY(0)';
-        observer.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.12 }
+/* ================= SCROLL REVEAL ================= */
+const targets = document.querySelectorAll(
+  '.head, .srv, .case, .person, .steps li, .details, .form, .stats li'
 );
 
-document.querySelectorAll('.card, .section-head').forEach((el) => {
-  el.style.opacity = 0;
-  el.style.transform = 'translateY(28px)';
-  el.style.transition = 'opacity .6s ease, transform .6s ease';
-  observer.observe(el);
-});
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+  );
+
+  targets.forEach((el, i) => {
+    el.classList.add('reveal');
+    el.style.transitionDelay = `${(i % 4) * 60}ms`;
+    io.observe(el);
+  });
+}
